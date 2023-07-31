@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Typing SpeedTest</title>
+</head>
+<body onload="getWords()">
+    <p class="warning">
+        <u>Warning</u>: Words are not chosen by me. Words are randomly generated with 
+        <a href="https://random-word-api.herokuapp.com/home" target="_blank">https://random-word-api.herokuapp.com/home</a> so there may be words one would find inappropiate and/or offensive.
+    </p>
+
+    <main>
+        <div class="wordsContainer">
+            <div class="loadingContainer">
+                <div class="cover"></div>
+                <p class="loading"></p>
+            </div>
+            <div id="words"></div>
+        </div>
+
+        <div class="timerAndReset">
+            <div class="timer">
+                <p class="minutes">01</p><p>:</p><p class="seconds">00</p>
+            </div>
+            <button class="resetButton" onclick="location.reload()">Reset</button>
+        </div>
+
+        <input type="text" class="input" placeholder="Start typing..." disabled/>
+    </main>
+
+    <div id="score"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

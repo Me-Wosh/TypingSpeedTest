@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    border-radius: 10px;
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgb(26, 26, 26);
+}
+
+.warning {
+    visibility: hidden;
+    width: 400px;
+    margin-bottom: 0.5em;
+    color: rgb(188, 188, 188);
+}
+
+.warning, .warning > * {
+    font-size: 12px;
+}
+
+.warning u {
+    color: red;
+}
+
+.warning a {
+    color: rgb(55, 88, 249);
+    word-break: keep-all;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    height: 400px;
+    width: 400px;
+}
+
+.wordsContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 70%;
+    background-color: rgb(188, 188, 188);
+    overflow: hidden;
+}
+
+.loadingContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: white;
+    overflow: hidden;
+    z-index: 2;
+}
+
+.cover {
+    position: absolute;
+    height: 32px;
+    width: 32px;
+    border-radius: inherit;
+    background-color: rgb(188, 188, 188);
+    z-index: 1;
+}
+
+.loading {
+    position: absolute;
+    height: 40px;
+    width: 22px;
+    border-radius: 0;
+    background-color: rgb(64, 181, 249);
+    z-index: 0;
+    box-shadow: 0 0 7px rgb(64, 161, 229);
+    animation-name: loadingAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes loadingAnimation {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.errorMessage {
+    color: red;
+    text-align: center;
+}
+
+.words {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    column-gap: 0.5em;
+    row-gap: 0.25em;
+    padding: 0.3em 0.5em 0.5em 0.5em;
+    height: 100%;
+}
+
+.timerAndReset {
+    display: flex;
+    column-gap: 0.5em;
+    height: 10%;
+}
+
+.timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: rgb(188, 188, 188);
+}
+
+.timer p {
+    font-size: x-large;
+}
+
+.resetButton {
+    width: 50%;
+    padding: 0;
+    border: none;
+    background-color: white;
+    font-size: x-large;
+}
+
+.resetButton:active {
+    background-color: darkgray;
+}
+
+.input {
+    padding: 0.5em;
+    border: none;
+    height: 20%;
+}
+
+.score {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.2em;
+    margin-top: 0.5em;
+    padding: 0.5em;
+    min-height: 40px;
+    width: 400px;
+    background-color: rgb(188, 188, 188);
+}
+
+@media (max-width: 400px) {
+    main, .score, .warning {
+        width: 300px;
+    }
+}
