@@ -64,7 +64,6 @@ main {
     border-radius: 50%;
     background-color: white;
     overflow: hidden;
-    z-index: 2;
 }
 
 .cover {

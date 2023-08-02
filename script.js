@@ -51,7 +51,6 @@ function getWords() {
         errorMessage.className = 'errorMessage'
         wordsContainer.appendChild(errorMessage)
         wordsContainer.removeChild(loading)
-        loading.style.visibility = 'hidden'
     } 
 }
 
@@ -108,27 +107,23 @@ function timer() {
     }, 1000)
 }
 
-function checkWord(event) {
-    input.value = input.value.trim()
-    let inputLength = input.value.length
+function checkWord () {
+    input.value = input.value.trimStart()
     let currentWord = document.getElementById(wordCount)
     let nextWord = document.getElementById(wordCount + 1)
 
     if (seconds < 1)
         return
 
-    if (event.key === ' ') {
-        if (inputLength < 1) {
-            input.value = ''
-            return
-        }
+    if (input.value.endsWith(' ')) {
+        input.value = input.value.trim()
 
         if (input.value === words[0]) {
             correctlySpelledWords++
             correctChars += words[0].length
             document.getElementById(wordCount).style.color = 'green'
         } else {
-            for (let i = 0; i < inputLength; i++) {
+            for (let i = 0; i < input.value.length; i++) {
                 input.value[i] === words[0][i] ? correctChars++ : incorrectChars++
             }
 
@@ -144,10 +139,10 @@ function checkWord(event) {
         wordCount++
         characters += words[0].length
 
-    } else if (event.key.length === 1 && input.value.slice(-1) !== words[0][inputLength - 1]) {
+    } else if (input.value.length > 0 && input.value.slice(-1) !== words[0][input.value.length - 1]) {
         incorrectChars++
     } 
 }
 
 input.addEventListener('input', timer)
-input.addEventListener('keyup', (e) => checkWord(e))
+input.addEventListener('input', checkWord)
