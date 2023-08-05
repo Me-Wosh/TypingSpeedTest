@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     border-radius: 10px;
-    color: black;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: large;
 }
@@ -12,14 +11,16 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    row-gap: 0.5em;
     min-height: 100vh;
     background-color: rgb(26, 26, 26);
 }
 
 .warning {
+    margin-bottom: -1px;
     visibility: hidden;
+    text-align: justify;
     width: 400px;
-    margin-bottom: 0.5em;
     color: rgb(188, 188, 188);
 }
 
@@ -54,35 +55,13 @@ main {
     overflow: hidden;
 }
 
-.loadingContainer {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.loading {
     height: 40px;
     width: 40px;
     border-radius: 50%;
-    background-color: white;
-    overflow: hidden;
-}
-
-.cover {
-    position: absolute;
-    height: 32px;
-    width: 32px;
-    border-radius: inherit;
-    background-color: rgb(188, 188, 188);
-    z-index: 1;
-}
-
-.loading {
-    position: absolute;
-    height: 40px;
-    width: 22px;
-    border-radius: 0;
-    background-color: rgb(64, 181, 249);
-    z-index: 0;
-    box-shadow: 0 0 7px rgb(64, 161, 229);
+    border: 6px solid white;
+    border-top: 6px solid rgb(64, 181, 249);
+    background-color: transparent;
     animation-name: loadingAnimation;
     animation-duration: 1s;
     animation-iteration-count: infinite;
@@ -102,6 +81,7 @@ main {
 .words {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -133,12 +113,12 @@ main {
     width: 50%;
     padding: 0;
     border: none;
-    background-color: white;
+    background-color: rgb(188, 188, 188);
     font-size: x-large;
 }
 
 .resetButton:active {
-    background-color: darkgray;
+    background-color: gray;
 }
 
 .input {
@@ -156,15 +136,54 @@ main {
     justify-content: center;
     align-items: flex-start;
     gap: 0.2em;
-    margin-top: 0.5em;
     padding: 0.5em;
     min-height: 40px;
     width: 400px;
     background-color: rgb(188, 188, 188);
 }
 
+.toggleContainer {
+    margin-top: -9px;
+    display: flex;
+    column-gap: 0.25em;
+    align-items: center;
+    color: rgb(188, 188, 188);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.toggleContainer p {
+    font-size: medium;
+}
+
+.toggleBox {
+    align-self: center;
+    padding: 2px;
+    border-radius: 10px;
+    height: 20px;
+    width: 40px;
+    background-color: rgb(220, 220, 220);
+}
+
+.toggle {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 0 2px gray;
+}
+
 @media (max-width: 400px) {
     main, .score, .warning {
         width: 300px;
+    }
+
+    .score p {
+        font-size: medium;
+    }
+
+    .toggleContainer p {
+        font-size: small;
     }
 }

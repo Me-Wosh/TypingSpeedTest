@@ -9,16 +9,15 @@
 </head>
 <body onload="getWords()">
     <p class="warning">
-        <u>Warning</u>: Words are not chosen by me. Words are randomly generated with 
-        <a href="https://random-word-api.herokuapp.com/home" target="_blank">https://random-word-api.herokuapp.com/home</a> so there may be words one would find inappropiate and/or offensive.
+        <u>Warning</u>: Words are randomly generated with 
+        <a href="https://random-word-api.herokuapp.com/home" target="_blank">https://random-word-api.herokuapp.com/home</a>. 
+        I am not the owner of the api and since it contains 100k+ words I cannot possibly check all of them so beware that 
+        there may be words someone could find inappropriate and/or offensive.
     </p>
 
     <main>
         <div class="wordsContainer">
-            <div class="loadingContainer">
-                <div class="cover"></div>
-                <p class="loading"></p>
-            </div>
+            <div class="loading"></div>
             <div id="words"></div>
         </div>
 
@@ -33,6 +32,15 @@
     </main>
 
     <div id="score"></div>
+
+    <div class="toggleContainer">
+        <p>Auto next word</p>
+        <p>/</p>
+        <p>Spacebar to next word</p>
+        <div class="toggleBox">
+            <div class="toggle"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

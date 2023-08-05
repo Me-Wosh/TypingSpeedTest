@@ -1,4 +1,10 @@
-var words = []
+var config = localStorage.getItem('config')
+
+if (!config) {
+    localStorage.setItem('config', 'auto')
+    config = 'auto'
+}
+
 const warning = document.querySelector('.warning')
 const wordsContainer = document.querySelector('.wordsContainer')
 const wordsDiv = document.querySelector('#words')
@@ -6,10 +12,15 @@ const minutesP = document.querySelector('.minutes')
 const secondsP = document.querySelector('.seconds')
 const input = document.querySelector('.input')
 const score = document.querySelector('#score')
-const loading = document.querySelector('.loadingContainer')
-var interval
+const loading = document.querySelector('.loading')
+const toggleContainer = document.querySelector('.toggleContainer')
+const toggleBox = document.querySelector('.toggleBox')
+const toggle = document.querySelector('.toggle')
+var words = []
+var currentWordInterval
 var seconds = 60
 var timerStarted = false
+var lastInput = ''
 var wordCount = 0
 var correctlySpelledWords = 0
 var characters = 0
@@ -18,7 +29,7 @@ var incorrectChars = 0
 
 function getWords() {
     try {
-        axios.get('https://random-word-api.herokuapp.com/word?number=1000&length=6')
+        axios.get('https://random-word-api.herokuapp.com/word?number=1000&length=5')
             .then((response) => {
                 words = response.data
                 let id = 0
@@ -37,6 +48,15 @@ function getWords() {
                 input.focus()
                 wordsContainer.removeChild(loading)
                 warning.style.visibility = 'visible'
+
+                currentWordInterval = setInterval(() => {
+                    let currentWord = document.getElementById(wordCount)
+                    currentWord.style.color = 'blue'
+
+                    if (seconds < 1) {
+                        clearInterval(currentWordInterval)
+                    }
+                }, 100)
             })
             .catch (() => {
                 let errorMessage = document.createElement('p')
@@ -62,8 +82,9 @@ function timer() {
     timerStarted = true
 
     warning.style.visibility = 'hidden'
+    toggleContainer.style.visibility = 'hidden'
 
-    interval = setInterval(() => {
+    let interval = setInterval(() => {
         seconds--
 
         if (seconds < 1) {
@@ -72,15 +93,18 @@ function timer() {
             input.style.color = 'gray'
             input.style.cursor = 'not-allowed'
             input.value = input.value.trim()
-    
-            if (input.value === words[0]) {
+
+            if (config === 'spacebar' && input.value === words[0]) {
                 correctlySpelledWords++
-                document.getElementById(wordCount).style.color = 'green'
+                document.getElementById(wordCount).style.color = 'rgba(0, 0, 0, 0.3)'
+                clearInterval(currentWordInterval)
                 wordCount++
             }
 
             for (let i = 0; i < input.value.length; i++) {
-                input.value[i] === words[0][i] ? correctChars++ : incorrectChars++
+                if (input.value[i] === words[0][i]) {
+                    correctChars++
+                }
             }
 
             input.value = 'Time\'s up!'
@@ -108,41 +132,116 @@ function timer() {
 }
 
 function checkWord () {
+    if (seconds < 1)
+        return
+
     input.value = input.value.trimStart()
     let currentWord = document.getElementById(wordCount)
     let nextWord = document.getElementById(wordCount + 1)
 
-    if (seconds < 1)
-        return
+    switch (config) {
+        case 'auto': {
+            if (input.value.trim() === words[0]) {
+                correctlySpelledWords++
+                correctChars += words[0].length
+                
+                document.getElementById(wordCount).style.color = 'rgba(0, 0, 0, 0.3)'
 
-    if (input.value.endsWith(' ')) {
-        input.value = input.value.trim()
+                if (currentWord.getBoundingClientRect().right > nextWord.getBoundingClientRect().left) {
+                    nextWord.scrollIntoView()
+                }
 
-        if (input.value === words[0]) {
-            correctlySpelledWords++
-            correctChars += words[0].length
-            document.getElementById(wordCount).style.color = 'green'
-        } else {
-            for (let i = 0; i < input.value.length; i++) {
-                input.value[i] === words[0][i] ? correctChars++ : incorrectChars++
+                input.value = ''
+                words.shift()
+                wordCount++
+                characters += words[0].length
+
+            } else if (input.value.endsWith(' ')) {
+                input.value = input.value.trim()
+
+                for (let i = 0; i < input.value.length; i++) {
+                    input.value[i] === words[0][i] ? correctChars++ : incorrectChars++
+                }
+
+                document.getElementById(wordCount).style.color = 'rgba(0, 0, 0, 0.3)'
+                document.getElementById(wordCount).style.textDecoration = 'line-through'
+
+                if (currentWord.getBoundingClientRect().right > nextWord.getBoundingClientRect().left) {
+                    nextWord.scrollIntoView()
+                }
+
+                input.value = ''
+                words.shift()
+                wordCount++
+                characters += words[0].length
+
+            } else if (
+                input.value.trim().length > 0 && 
+                input.value.trim().length > lastInput.length && 
+                input.value.slice(-1) !== words[0][input.value.length - 1]
+            ) {
+                incorrectChars++
             }
-
-            document.getElementById(wordCount).style.color = 'red'
         }
 
-        if (currentWord.getBoundingClientRect().right > nextWord.getBoundingClientRect().left) {
-            nextWord.scrollIntoView()
+        case 'spacebar': {
+            if (input.value.endsWith(' ')) {
+                input.value = input.value.trim()
+
+                if (input.value === words[0]) {
+                    correctlySpelledWords++
+                    correctChars += words[0].length
+                    document.getElementById(wordCount).style.color = 'rgba(0, 0, 0, 0.3)'
+                } else {
+                    for (let i = 0; i < input.value.length; i++) {
+                        input.value[i] === words[0][i] ? correctChars++ : incorrectChars++
+                    }
+
+                    document.getElementById(wordCount).style.color = 'rgba(0, 0, 0, 0.3)'
+                    document.getElementById(wordCount).style.textDecoration = 'line-through'
+                }
+
+                if (currentWord.getBoundingClientRect().right > nextWord.getBoundingClientRect().left) {
+                    nextWord.scrollIntoView()
+                }
+
+                input.value = ''
+                words.shift()
+                wordCount++
+                characters += words[0].length
+
+            } else if (
+                input.value.trim().length > 0 && 
+                input.value.trim().length > lastInput.length && 
+                input.value.slice(-1) !== words[0][input.value.length - 1]
+            ) {
+                incorrectChars++
+            }
         }
+    }
 
-        words.shift()
-        input.value = ''
-        wordCount++
-        characters += words[0].length
+    lastInput = input.value.trim()
+}
 
-    } else if (input.value.length > 0 && input.value.slice(-1) !== words[0][input.value.length - 1]) {
-        incorrectChars++
-    } 
+if (config === 'spacebar') {
+    toggle.style.transform = 'translate(20px)'
+    toggleBox.style.backgroundColor = 'rgb(0, 230, 0)'
+}
+
+function toggleClick () {
+    if (config === 'auto') {
+        config = 'spacebar'
+        localStorage.setItem('config', config)
+        toggle.animate({transform: 'translateX(20px)'}, {duration: 200, fill: 'forwards'})
+        toggleBox.animate({backgroundColor: 'rgb(0, 230, 0)'}, {duration: 200, fill: 'forwards'})
+    } else {
+        config = 'auto'
+        localStorage.setItem('config', config)
+        toggle.animate({transform: 'translateX(0px)'}, {duration: 200, fill: 'forwards'})
+        toggleBox.animate({backgroundColor: 'rgb(220, 220, 220)'}, {duration: 200, fill: 'forwards'})
+    }
 }
 
 input.addEventListener('input', timer)
 input.addEventListener('input', checkWord)
+toggleBox.addEventListener('click', toggleClick)
